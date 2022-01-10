@@ -59,7 +59,7 @@ const App = () => {
                 />
               </View>
               <View style={styles.textbox}>
-                <Text style={styles.listTile}>{item.title}</Text>
+                <Text style={styles.listTitle}>{item.title}</Text>
                 <Text>{item.description}</Text>
               </View>
             </TouchableOpacity>
@@ -75,9 +75,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     padding: 15,
-    marginBottom: 5,
     backgroundColor: '#eee',
     borderRadius: 6,
+    marginHorizontal: 10,
+    marginBottom: 5,
   },
   imagebox: {
     flex: 1,
