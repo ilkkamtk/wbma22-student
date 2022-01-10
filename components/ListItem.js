@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 });
 
 ListItem.propTypes = {
-  singleMedia: PropTypes.object.required,
+  singleMedia: PropTypes.object.isRequired,
 };
 
 export default ListItem;
