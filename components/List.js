@@ -12,7 +12,7 @@ const List = ({navigation}) => {
       data={mediaArray}
       keyExtractor={(item) => item.file_id.toString()}
       renderItem={({item}) => (
-        <ListItem navigation={{navigation}} singleMedia={item} />
+        <ListItem navigation={navigation} singleMedia={item} />
       )}
     ></FlatList>
   );
