@@ -1,8 +1,11 @@
 import React from 'react';
 import {Text, View, TextInput, Button} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {useUser} from '../hooks/ApiHooks';
 
 const RegisterForm = () => {
+  const {postUser} = useUser();
+
   const {
     control,
     handleSubmit,
@@ -18,6 +21,12 @@ const RegisterForm = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const userData = await postUser(data);
+      console.log('register onSubmit', userData);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

@@ -45,7 +45,6 @@ const useLogin = () => {
       body: JSON.stringify(userCredentials),
     };
     try {
-      // TODO: use fetch to send request to login endpoint and return the result as json, handle errors with try/catch and response.ok
       const response = await fetch(baseUrl + 'login', options);
       const userData = await response.json();
       if (response.ok) {
@@ -80,7 +79,28 @@ const useUser = () => {
     }
   };
 
-  return {getUserByToken};
+  const postUser = async (data) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      const response = await fetch(baseUrl + 'users', options);
+      const userData = await response.json();
+      if (response.ok) {
+        return userData;
+      } else {
+        throw new Error(userData.message);
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {getUserByToken, postUser};
 };
 
 export {useMedia, useLogin, useUser};
