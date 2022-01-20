@@ -30,23 +30,10 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-  const logIn = async () => {
-    // hard code your username and password:
-    const data = {username: 'ilkkamtk', password: 'asdfASDF1234'};
-    try {
-      const userData = await postLogin(data);
-      await AsyncStorage.setItem('userToken', userData.token);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Text>Login</Text>
       <LoginForm />
-      <Button title="Sign in!" onPress={logIn} />
     </View>
   );
 };
