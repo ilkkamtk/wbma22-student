@@ -90,10 +90,11 @@ const useUser = () => {
     try {
       const response = await fetch(baseUrl + 'users', options);
       const userData = await response.json();
+      console.log('postUser', userData);
       if (response.ok) {
         return userData;
       } else {
-        throw new Error(userData.message);
+        throw new Error(userData.message + ': ' + userData.error);
       }
     } catch (error) {
       throw new Error(error.message);
