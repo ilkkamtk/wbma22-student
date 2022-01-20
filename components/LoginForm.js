@@ -40,7 +40,7 @@ const LoginForm = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 10}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -59,7 +59,7 @@ const LoginForm = () => {
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <TextInput
-            style={{borderWidth: 1}}
+            style={{borderWidth: 1, padding: 10}}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}

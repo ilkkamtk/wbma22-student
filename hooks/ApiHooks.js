@@ -68,7 +68,7 @@ const useUser = () => {
         headers: {'x-access-token': token},
       };
       const response = await fetch(baseUrl + 'users/user', options);
-      const userData = response.json();
+      const userData = await response.json();
       if (response.ok) {
         return userData;
       } else {
