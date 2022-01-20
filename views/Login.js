@@ -12,7 +12,10 @@ const Login = ({navigation}) => {
 
   const checkToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    console.log('token value in async storage', userToken);
+    // console.log('token value in async storage', userToken);
+    if (!userToken) {
+      return;
+    }
     try {
       const userData = await getUserByToken(userToken);
       console.log('chekToken', userData);
