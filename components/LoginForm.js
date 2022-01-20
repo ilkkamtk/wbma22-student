@@ -44,6 +44,7 @@ const LoginForm = () => {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
+            placeholder="Username"
           />
         )}
         name="username"
@@ -62,6 +63,8 @@ const LoginForm = () => {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
+            secureTextEntry={true}
+            placeholder="Password"
           />
         )}
         name="password"
