@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView, Text, Button, Image} from 'react-native';
+import {StyleSheet, ActivityIndicator} from 'react-native';
+import {Card, Text, Button, ListItem, Avatar} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
@@ -30,7 +31,10 @@ const Profile = () => {
       tag: 'avatar_' + user.user_id,
     };
     try {
-      const result = await postTag(data, 'correct token should be here to use this');
+      const result = await postTag(
+        data,
+        'correct token should be here to use this'
+      );
       console.log(result);
     } catch (error) {
       console.error(error.message);
@@ -43,16 +47,23 @@ const Profile = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Profile</Text>
-      <Text>{user.username}</Text>
-      <Image
+    <Card>
+      <Card.Title>
+        <Text h1>{user.username}</Text>
+      </Card.Title>
+      <Card.Image
         source={{uri: avatar}}
-        style={{width: '80%', height: '50%'}}
-        resizeMode="contain"
+        style={styles.image}
+        PlaceholderContent={<ActivityIndicator />}
       />
-      <Text>{user.email}</Text>
-      <Text>{user.full_name}</Text>
+      <ListItem>
+        <Avatar icon={{name: 'email', color: 'black'}} />
+        <Text>{user.email}</Text>
+      </ListItem>
+      <ListItem>
+        <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
+        <Text>{user.full_name}</Text>
+      </ListItem>
       <Button
         title="Log out!"
         onPress={async () => {
@@ -60,18 +71,12 @@ const Profile = () => {
           setIsLoggedIn(false);
         }}
       />
-    </SafeAreaView>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
+  image: {width: '100%', height: undefined, aspectRatio: 1},
 });
 
 export default Profile;
