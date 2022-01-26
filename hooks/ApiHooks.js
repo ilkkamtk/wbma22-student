@@ -91,8 +91,16 @@ const useUser = () => {
 };
 
 const useTag = () => {
-  const postTag = async (data) => {
-    // TODO: implement later
+  const postTag = async (tagData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(tagData),
+    };
+    return await doFetch(baseUrl + 'tags/', options);
   };
 
   const getFilesByTag = async (tag) => {

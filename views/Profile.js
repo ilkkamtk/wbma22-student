@@ -8,7 +8,7 @@ import {uploadsUrl} from '../utils/variables';
 const Profile = () => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const {getFilesByTag} = useTag();
+  const {postTag, getFilesByTag} = useTag();
   console.log('Profile', user);
 
   const fetchAvatar = async () => {
@@ -21,8 +21,25 @@ const Profile = () => {
     }
   };
 
+  // quick'n'dirty testing postTag with hardcoded token
+  // this is not needed yet and should be called only when you want to set
+  // a new avatar in the remote API
+  const createAvatar = async (mediaId) => {
+    const data = {
+      file_id: mediaId,
+      tag: 'avatar_' + user.user_id,
+    };
+    try {
+      const result = await postTag(data, 'correct token should be here to use this');
+      console.log(result);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     fetchAvatar();
+    // createAvatar(95); this was just for testing
   }, []);
 
   return (
