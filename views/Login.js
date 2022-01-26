@@ -26,7 +26,8 @@ const Login = ({navigation}) => {
     }
     try {
       const userData = await getUserByToken(userToken);
-      console.log('chekToken', userData);
+      console.log('checkToken', userData);
+      console.log('token', userToken);
       setUser(userData);
       setIsLoggedIn(true);
     } catch (error) {
