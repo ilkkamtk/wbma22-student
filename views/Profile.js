@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator} from 'react-native';
+import {StyleSheet, ActivityIndicator, ScrollView} from 'react-native';
 import {Card, Text, Button, ListItem, Avatar} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
 import {uploadsUrl} from '../utils/variables';
+import {PropTypes} from 'prop-types';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {postTag, getFilesByTag} = useTag();
@@ -47,36 +48,48 @@ const Profile = () => {
   }, []);
 
   return (
-    <Card>
-      <Card.Title>
-        <Text h1>{user.username}</Text>
-      </Card.Title>
-      <Card.Image
-        source={{uri: avatar}}
-        style={styles.image}
-        PlaceholderContent={<ActivityIndicator />}
-      />
-      <ListItem>
-        <Avatar icon={{name: 'email', color: 'black'}} />
-        <Text>{user.email}</Text>
-      </ListItem>
-      <ListItem>
-        <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
-        <Text>{user.full_name}</Text>
-      </ListItem>
-      <Button
-        title="Log out!"
-        onPress={async () => {
-          await AsyncStorage.clear();
-          setIsLoggedIn(false);
-        }}
-      />
-    </Card>
+    <ScrollView>
+      <Card>
+        <Card.Title>
+          <Text h1>{user.username}</Text>
+        </Card.Title>
+        <Card.Image
+          source={{uri: avatar}}
+          style={styles.image}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+        <ListItem>
+          <Avatar icon={{name: 'email', color: 'black'}} />
+          <Text>{user.email}</Text>
+        </ListItem>
+        <ListItem>
+          <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
+          <Text>{user.full_name}</Text>
+        </ListItem>
+        <Button
+          title="Log out!"
+          onPress={async () => {
+            await AsyncStorage.clear();
+            setIsLoggedIn(false);
+          }}
+        />
+        <Button
+          title="Modify user"
+          onPress={() => {
+            navigation.navigate('Modify user');
+          }}
+        />
+      </Card>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   image: {width: '100%', height: undefined, aspectRatio: 1},
 });
+
+Profile.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default Profile;
