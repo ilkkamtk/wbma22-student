@@ -30,6 +30,9 @@ const ModifyUser = ({navigation}) => {
     console.log(data);
     try {
       delete data.confirmPassword;
+      if (data.password === '') {
+        delete data.password;
+      }
       const userToken = await AsyncStorage.getItem('userToken');
       const userData = await putUser(data, userToken);
       if (userData) {
