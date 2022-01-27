@@ -18,6 +18,7 @@ const RegisterForm = () => {
       email: '',
       full_name: '',
     },
+    mode: 'onBlur',
   });
 
   const onSubmit = async (data) => {
