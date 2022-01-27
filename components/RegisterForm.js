@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
-import {Input, Button, Text} from 'react-native-elements';
+import {Input, Button} from 'react-native-elements';
 
 const RegisterForm = () => {
   const {postUser, checkUsername} = useUser();
@@ -11,6 +11,7 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     formState: {errors},
+    getValues,
   } = useForm({
     defaultValues: {
       username: '',
@@ -75,6 +76,12 @@ const RegisterForm = () => {
             value: 5,
             message: 'Password has to be at least 5 characters.',
           },
+          /*
+          pattern: {
+            value: /(?=.*[\p{Lu}])(?=.*[0-9]).{8,}/u,
+            message: 'Min 8, Uppercase, Number',
+          },
+          */
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -93,7 +100,40 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'This is required.'},
+          validate: (value) => {
+            const {password} = getValues();
+            if (value === password) {
+              return true;
+            } else {
+              return 'Passwords do not match.';
+            }
+          },
+        }}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            placeholder="Confirm Password"
+            errorMessage={
+              errors.confirmPassword && errors.confirmPassword.message
+            }
+          />
+        )}
+        name="confirmPassword"
+      />
+
+      <Controller
+        control={control}
+        rules={{
+          required: {value: true, message: 'This is required.'},
+          pattern: {
+            value: /\S+@\S+\.\S+$/,
+            message: 'Has to be valid email.',
+          },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
