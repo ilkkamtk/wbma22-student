@@ -36,14 +36,18 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'This is required.'},
+          minLength: {
+            value: 3,
+            message: 'Username has to be at least 3 characters.',
+          },
           validate: async (value) => {
             try {
               const available = await checkUsername(value);
               if (available) {
                 return true;
               } else {
-                return 'Username is already taken!';
+                return 'Username is already taken.';
               }
             } catch (error) {
               throw new Error(error.message);
@@ -66,7 +70,11 @@ const RegisterForm = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: {value: true, message: 'This is required.'},
+          minLength: {
+            value: 5,
+            message: 'Password has to be at least 5 characters.',
+          },
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -76,11 +84,11 @@ const RegisterForm = () => {
             autoCapitalize="none"
             secureTextEntry={true}
             placeholder="Password"
+            errorMessage={errors.password && errors.password.message}
           />
         )}
         name="password"
       />
-      {errors.password && <Text>This is required.</Text>}
 
       <Controller
         control={control}
@@ -94,14 +102,20 @@ const RegisterForm = () => {
             value={value}
             autoCapitalize="none"
             placeholder="Email"
+            errorMessage={errors.email && errors.email.message}
           />
         )}
         name="email"
       />
-      {errors.email && <Text>This is required.</Text>}
 
       <Controller
         control={control}
+        rules={{
+          minLength: {
+            value: 3,
+            message: 'Full name has to be at least 3 characters.',
+          },
+        }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             onBlur={onBlur}
@@ -109,6 +123,7 @@ const RegisterForm = () => {
             value={value}
             autoCapitalize="words"
             placeholder="Full name"
+            errorMessage={errors.full_name && errors.full_name.message}
           />
         )}
         name="full_name"
