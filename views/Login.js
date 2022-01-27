@@ -72,7 +72,7 @@ const Login = ({navigation}) => {
             <Card>
               <Card.Title h4>Register</Card.Title>
               <Card.Divider />
-              <RegisterForm />
+              <RegisterForm setFormToggle={setFormToggle} />
             </Card>
           )}
         </View>

@@ -1,10 +1,10 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks/ApiHooks';
 import {Input, Button} from 'react-native-elements';
 
-const RegisterForm = () => {
+const RegisterForm = ({setFormToggle}) => {
   const {postUser, checkUsername} = useUser();
 
   const {
@@ -25,8 +25,13 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
+      delete data.confirmPassword;
       const userData = await postUser(data);
       console.log('register onSubmit', userData);
+      if (userData) {
+        Alert.alert('Success', 'User created successfully.');
+        setFormToggle(true);
+      }
     } catch (error) {
       console.error(error);
     }
