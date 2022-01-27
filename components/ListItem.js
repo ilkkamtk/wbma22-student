@@ -13,7 +13,6 @@ const ListItem = ({navigation, singleMedia}) => {
     >
       <Avatar
         size="large"
-        square
         source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
       ></Avatar>
       <RNEListItem.Content>

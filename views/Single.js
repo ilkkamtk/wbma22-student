@@ -10,7 +10,7 @@ const Single = ({route}) => {
   return (
     <Card>
       <Card.Title h4>{file.title}</Card.Title>
-      <Card.Title>file.time_added</Card.Title>
+      <Card.Title>{file.time_added}</Card.Title>
       <Card.Divider />
       <Card.Image
         source={{uri: uploadsUrl + file.filename}}
