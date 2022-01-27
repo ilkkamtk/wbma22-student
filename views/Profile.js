@@ -10,7 +10,7 @@ import {PropTypes} from 'prop-types';
 const Profile = ({navigation}) => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const {postTag, getFilesByTag} = useTag();
+  const {getFilesByTag} = useTag();
   console.log('Profile', user);
 
   const fetchAvatar = async () => {
@@ -26,6 +26,7 @@ const Profile = ({navigation}) => {
   // quick'n'dirty testing postTag with hardcoded token
   // this is not needed yet and should be called only when you want to set
   // a new avatar in the remote API
+  /*
   const createAvatar = async (mediaId) => {
     const data = {
       file_id: mediaId,
@@ -41,6 +42,7 @@ const Profile = ({navigation}) => {
       console.error(error.message);
     }
   };
+  */
 
   useEffect(() => {
     fetchAvatar();
