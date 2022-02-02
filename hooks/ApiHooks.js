@@ -48,7 +48,18 @@ const useMedia = () => {
     loadMedia(0, 5);
   }, []);
 
-  return {mediaArray};
+  const postMedia = async (formData, token) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    };
+    return await doFetch(baseUrl + 'media', options);
+  };
+  return {mediaArray, postMedia};
 };
 
 const useLogin = () => {
