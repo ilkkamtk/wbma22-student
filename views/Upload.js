@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Alert, ScrollView, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,7 @@ import {Button, Card, Input} from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(
@@ -21,6 +22,7 @@ const Upload = ({navigation}) => {
     control,
     handleSubmit,
     formState: {errors},
+    setValue,
   } = useForm({
     defaultValues: {
       title: '',
@@ -42,6 +44,19 @@ const Upload = ({navigation}) => {
       setType(result.type);
     }
   };
+
+  const reset = () => {
+    setImage('https://place-hold.it/300x200&text=Choose');
+    setImageSelected(false);
+    setValue('title', '');
+    setValue('description', '');
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => reset();
+    })
+  );
 
   const onSubmit = async (data) => {
     if (!imageSelected) {
@@ -68,7 +83,6 @@ const Upload = ({navigation}) => {
         {
           text: 'Ok',
           onPress: () => {
-            // TODO: clear the form values here after submission
             setUpdate(update + 1);
             navigation.navigate('Home');
           },
@@ -134,6 +148,7 @@ const Upload = ({navigation}) => {
           title="Upload"
           onPress={handleSubmit(onSubmit)}
         />
+        <Button title="Reset form" onPress={reset} />
       </Card>
     </ScrollView>
   );
