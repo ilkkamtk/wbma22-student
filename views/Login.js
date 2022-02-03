@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Keyboard,
   View,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -53,9 +55,9 @@ const Login = ({navigation}) => {
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : ''}
-        style={styles.container}
+        style={styles.FlexGrowOne}
       >
-        <View style={styles.form}>
+        <ScrollView contentContainerStyle={styles.container}>
           <Card>
             <Card.Image style={styles.fakeImage}>
               {/* <Logo /> */}
@@ -85,24 +87,18 @@ const Login = ({navigation}) => {
               <RegisterForm setFormToggle={setFormToggle} />
             </Card>
           )}
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  FlexGrowOne: {
+    flexGrow: 1,
+  },
   container: {
-    flex: 1,
     padding: 16,
-  },
-  appTitle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  form: {
-    flex: 8,
   },
   animation: {
     justifyContent: 'center',
