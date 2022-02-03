@@ -14,9 +14,11 @@ import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import {ButtonGroup, Card} from 'react-native-elements';
-import Logo from '../assets/logo.svg';
+// import Logo from '../assets/logo.svg';
+import LottieView from 'lottie-react-native';
 
 const Login = ({navigation}) => {
+  const animation = React.createRef();
   const [formToggle, setFormToggle] = useState(true);
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {getUserByToken} = useUser();
@@ -40,6 +42,7 @@ const Login = ({navigation}) => {
 
   useEffect(() => {
     checkToken();
+    animation.current?.play();
   }, []);
 
   return (
@@ -52,11 +55,17 @@ const Login = ({navigation}) => {
         behavior={Platform.OS === 'ios' ? 'padding' : ''}
         style={styles.container}
       >
-        <View style={styles.appTitle}>
-          <Logo style={styles.logo} />
-        </View>
         <View style={styles.form}>
           <Card>
+            <Card.Image style={styles.fakeImage}>
+              {/* <Logo /> */}
+              <LottieView
+                ref={animation}
+                source={require('../assets/lottie-animation.json')}
+                style={styles.animation}
+                loop={false}
+              />
+            </Card.Image>
             <ButtonGroup
               onPress={() => setFormToggle(!formToggle)}
               selectedIndex={formToggle ? 0 : 1}
@@ -95,8 +104,13 @@ const styles = StyleSheet.create({
   form: {
     flex: 8,
   },
-  logo: {
-    marginTop: 20,
+
+  animation: {
+    justifyContent: 'center',
+    flex: 1,
+  },
+  fakeImage: {
+    backgroundColor: '#fff',
   },
 });
 
