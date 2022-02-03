@@ -5,9 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Card, Input} from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
+import {appId} from '../utils/variables';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(
@@ -16,6 +17,7 @@ const Upload = ({navigation}) => {
   const [type, setType] = useState('');
   const [imageSelected, setImageSelected] = useState(false);
   const {postMedia, loading} = useMedia();
+  const {postTag} = useTag();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
@@ -79,15 +81,24 @@ const Upload = ({navigation}) => {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
       console.log('upload response', response);
-      Alert.alert('File', 'uploaded', [
+      const tagResponse = await postTag(
         {
-          text: 'Ok',
-          onPress: () => {
-            setUpdate(update + 1);
-            navigation.navigate('Home');
-          },
+          file_id: response.file_id,
+          tag: appId,
         },
-      ]);
+        token
+      );
+      console.log('tag response', tagResponse);
+      tagResponse &&
+        Alert.alert('File', 'uploaded', [
+          {
+            text: 'Ok',
+            onPress: () => {
+              setUpdate(update + 1);
+              navigation.navigate('Home');
+            },
+          },
+        ]);
     } catch (error) {
       // You should notify the user about problems here
       console.log('onSubmit upload image problem');
