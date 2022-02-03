@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Alert, ScrollView, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
-import {Button, Card, Input, Text} from 'react-native-elements';
+import {Button, Card, Input} from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
@@ -80,6 +80,8 @@ const Upload = ({navigation}) => {
     }
   };
 
+  console.log('loading', loading);
+
   return (
     <ScrollView>
       <Card>
@@ -101,11 +103,11 @@ const Upload = ({navigation}) => {
               value={value}
               autoCapitalize="none"
               placeholder="Title"
+              errorMessage={errors.title && 'This is required.'}
             />
           )}
           name="title"
         />
-        {errors.title && <Text>This is required.</Text>}
 
         <Controller
           control={control}
@@ -119,14 +121,15 @@ const Upload = ({navigation}) => {
               value={value}
               autoCapitalize="none"
               placeholder="Description"
+              errorMessage={errors.description && 'This is required.'}
             />
           )}
           name="description"
         />
-        {errors.description && <Text>This is required.</Text>}
 
         <Button title="Choose image" onPress={pickImage} />
         <Button
+          disabled={!imageSelected}
           loading={loading}
           title="Upload"
           onPress={handleSubmit(onSubmit)}

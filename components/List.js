@@ -5,7 +5,8 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 
 const List = ({navigation}) => {
-  const {mediaArray} = useMedia();
+  const {mediaArray, loading} = useMedia();
+  console.log('List load', loading);
 
   return (
     <FlatList
