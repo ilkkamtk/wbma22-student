@@ -9,12 +9,13 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils/variables';
+import {Video} from 'expo-av';
 
 const Upload = ({navigation}) => {
   const [image, setImage] = useState(
     'https://place-hold.it/300x200&text=Choose'
   );
-  const [type, setType] = useState('');
+  const [type, setType] = useState('image');
   const [imageSelected, setImageSelected] = useState(false);
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
@@ -52,6 +53,7 @@ const Upload = ({navigation}) => {
     setImageSelected(false);
     setValue('title', '');
     setValue('description', '');
+    setType('image');
   };
 
   useFocusEffect(
@@ -105,17 +107,28 @@ const Upload = ({navigation}) => {
     }
   };
 
-  console.log('loading', loading);
+  console.log('type', type);
 
   return (
     <ScrollView>
       <Card>
-        <Card.Image
-          source={{uri: image}}
-          style={styles.image}
-          onPress={pickImage}
-        ></Card.Image>
-
+        {type === 'image' ? (
+          <Card.Image
+            source={{uri: image}}
+            style={styles.image}
+            onPress={pickImage}
+          ></Card.Image>
+        ) : (
+          <Video
+            source={{uri: image}}
+            style={styles.image}
+            useNativeControls={true}
+            resizeMode="cover"
+            onError={(err) => {
+              console.error('video', err);
+            }}
+          />
+        )}
         <Controller
           control={control}
           rules={{
