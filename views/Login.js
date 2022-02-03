@@ -5,9 +5,7 @@ import {
   Platform,
   TouchableOpacity,
   Keyboard,
-  View,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
