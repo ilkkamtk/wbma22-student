@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
   form: {
     flex: 8,
   },
-
   animation: {
     justifyContent: 'center',
     flex: 1,
