@@ -55,7 +55,7 @@ const Upload = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       return () => reset();
-    })
+    }, [])
   );
 
   const onSubmit = async (data) => {
