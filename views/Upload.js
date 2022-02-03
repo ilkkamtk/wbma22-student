@@ -9,10 +9,12 @@ import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 
 const Upload = ({navigation}) => {
-  const [image, setImage] = useState('https://place-hold.it/300x200&text=Choose');
+  const [image, setImage] = useState(
+    'https://place-hold.it/300x200&text=Choose'
+  );
   const [type, setType] = useState('');
   const [imageSelected, setImageSelected] = useState(false);
-  const {postMedia} = useMedia();
+  const {postMedia, loading} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
@@ -124,7 +126,11 @@ const Upload = ({navigation}) => {
         {errors.description && <Text>This is required.</Text>}
 
         <Button title="Choose image" onPress={pickImage} />
-        <Button title="Upload" onPress={handleSubmit(onSubmit)} />
+        <Button
+          loading={loading}
+          title="Upload"
+          onPress={handleSubmit(onSubmit)}
+        />
       </Card>
     </ScrollView>
   );
