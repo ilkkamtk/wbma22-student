@@ -7,8 +7,17 @@ import {
   ListItem as RNEListItem,
 } from 'react-native-elements';
 import {Alert} from 'react-native';
+import {useMedia} from '../hooks/ApiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
+  const {deleteMedia} = useMedia();
+  const doDelete = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    const response = await deleteMedia(singleMedia.file_id, token);
+    console.log('delete', response);
+  };
+
   return (
     <RNEListItem
       bottomDivider
@@ -33,7 +42,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               if (index === 0) {
                 navigation.navigate('Modify', {file: singleMedia});
               } else {
-                Alert.alert('Delete');
+                doDelete();
               }
             }}
             buttons={['Modify', 'Delete']}
