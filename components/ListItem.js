@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 import {
@@ -9,13 +9,27 @@ import {
 import {Alert} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {MainContext} from '../contexts/MainContext';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
-  const doDelete = async () => {
-    const token = await AsyncStorage.getItem('userToken');
-    const response = await deleteMedia(singleMedia.file_id, token);
-    console.log('delete', response);
+  const {update, setUpdate} = useContext(MainContext);
+  const doDelete = () => {
+    Alert.alert('Delete', 'this file permanently', [
+      {text: 'Cancel'},
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            const token = await AsyncStorage.getItem('userToken');
+            const response = await deleteMedia(singleMedia.file_id, token);
+            response && setUpdate(update + 1);
+          } catch (error) {
+            console.error(error);
+          }
+        },
+      },
+    ]);
   };
 
   return (
