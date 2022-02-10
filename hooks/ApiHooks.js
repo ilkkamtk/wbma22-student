@@ -19,10 +19,10 @@ const doFetch = async (url, options = {}) => {
   }
 };
 
-const useMedia = () => {
+const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {update} = useContext(MainContext);
+  const {update, user} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
     setLoading(true);
     try {
@@ -33,7 +33,11 @@ const useMedia = () => {
       }
       const json = await response.json();
       */
-      const json = await useTag().getFilesByTag(appId);
+      let json = await useTag().getFilesByTag(appId);
+      if (myFilesOnly) {
+        // filter files belonging to the current user
+        json = json.filter((file) => file.user_id === user.user_id);
+      }
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);

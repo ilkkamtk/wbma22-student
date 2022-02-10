@@ -94,8 +94,6 @@ const Single = ({route}) => {
     fetchLikes();
   }, [userLike]);
 
-  console.log('likes', likes, 'userlike', userLike);
-
   return (
     <ScrollView>
       <Card>
