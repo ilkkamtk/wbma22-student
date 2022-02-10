@@ -77,7 +77,20 @@ const useMedia = (myFilesOnly) => {
     result && setLoading(false);
     return result;
   };
-  return {mediaArray, postMedia, loading};
+
+  const putMedia = async (data, token, fileId) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(data),
+    };
+    return await doFetch(baseUrl + `media/${fileId}`, options);
+  };
+
+  return {mediaArray, postMedia, putMedia, loading};
 };
 
 const useLogin = () => {

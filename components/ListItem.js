@@ -31,7 +31,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <ButtonGroup
             onPress={(index) => {
               if (index === 0) {
-                Alert.alert('Modify');
                 navigation.navigate('Modify', {file: singleMedia});
               } else {
                 Alert.alert('Delete');

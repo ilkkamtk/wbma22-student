@@ -1,134 +1,52 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
-import {Alert, ScrollView, StyleSheet} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Controller, useForm} from 'react-hook-form';
 import {Button, Card, Input} from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker';
-import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {useFocusEffect} from '@react-navigation/native';
-import {appId} from '../utils/variables';
-import {Video} from 'expo-av';
 
-const Modify = ({navigation}) => {
-  const [image, setImage] = useState(
-    'https://place-hold.it/300x200&text=Choose'
-  );
-  const [type, setType] = useState('image');
-  const [imageSelected, setImageSelected] = useState(false);
-  const {postMedia, loading} = useMedia();
-  const {postTag} = useTag();
+const Modify = ({navigation, route}) => {
+  const {file} = route.params;
+  const {putMedia, loading} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
   const {
     control,
     handleSubmit,
     formState: {errors},
-    setValue,
   } = useForm({
     defaultValues: {
-      title: '',
-      description: '',
+      title: file.title,
+      description: file.description,
     },
   });
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 0.5,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setImage(result.uri);
-      setImageSelected(true);
-      setType(result.type);
-    }
-  };
-
-  const reset = () => {
-    setImage('https://place-hold.it/300x200&text=Choose');
-    setImageSelected(false);
-    setValue('title', '');
-    setValue('description', '');
-    setType('image');
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => reset();
-    }, [])
-  );
-
   const onSubmit = async (data) => {
-    if (!imageSelected) {
-      Alert.alert('Please, select a file');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    const filename = image.split('/').pop();
-    let fileExtension = filename.split('.').pop();
-    fileExtension = fileExtension === 'jpg' ? 'jpeg' : fileExtension;
-    formData.append('file', {
-      uri: image,
-      name: filename,
-      type: type + '/' + fileExtension,
-    });
-    // console.log(formData);
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const response = await postMedia(formData, token);
-      console.log('upload response', response);
-      const tagResponse = await postTag(
-        {
-          file_id: response.file_id,
-          tag: appId,
-        },
-        token
-      );
-      console.log('tag response', tagResponse);
-      tagResponse &&
-        Alert.alert('File', 'uploaded', [
+      const response = await putMedia(data, token, file.file_id);
+      console.log('modify response', response);
+      response &&
+        Alert.alert('File', 'modified', [
           {
             text: 'Ok',
             onPress: () => {
               setUpdate(update + 1);
-              navigation.navigate('Home');
+              navigation.navigate('My Files');
             },
           },
         ]);
     } catch (error) {
       // You should notify the user about problems here
-      console.log('onSubmit upload image problem');
+      console.log('onSubmit update image problem');
     }
   };
-
-  console.log('type', type);
 
   return (
     <ScrollView>
       <Card>
-        {type === 'image' ? (
-          <Card.Image
-            source={{uri: image}}
-            style={styles.image}
-            onPress={pickImage}
-          ></Card.Image>
-        ) : (
-          <Video
-            source={{uri: image}}
-            style={styles.image}
-            useNativeControls={true}
-            resizeMode="cover"
-            onError={(err) => {
-              console.error('video', err);
-            }}
-          />
-        )}
         <Controller
           control={control}
           rules={{
@@ -136,6 +54,7 @@ const Modify = ({navigation}) => {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <Input
+              label="Title"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -154,6 +73,7 @@ const Modify = ({navigation}) => {
           }}
           render={({field: {onChange, onBlur, value}}) => (
             <Input
+              label="Description"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -164,32 +84,19 @@ const Modify = ({navigation}) => {
           )}
           name="description"
         />
-
-        <Button title="Choose image" onPress={pickImage} />
         <Button
-          disabled={!imageSelected}
           loading={loading}
-          title="Upload"
+          title="Save changes"
           onPress={handleSubmit(onSubmit)}
         />
-        <Button title="Reset form" onPress={reset} />
       </Card>
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginBottom: 15,
-    resizeMode: 'contain',
-  },
-});
-
 Modify.propTypes = {
   navigation: PropTypes.object,
+  route: PropTypes.object,
 };
 
 export default Modify;
