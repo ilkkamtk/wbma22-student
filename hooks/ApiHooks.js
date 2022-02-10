@@ -87,10 +87,18 @@ const useMedia = (myFilesOnly) => {
       },
       body: JSON.stringify(data),
     };
-    return await doFetch(baseUrl + `media/${fileId}`, options);
+    return await doFetch(`${baseUrl}media/${fileId}`, options);
   };
 
-  return {mediaArray, postMedia, putMedia, loading};
+  const deleteMedia = async (fileId, token) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'x-access-token': token},
+    };
+    return await doFetch(`${baseUrl}media/${fileId}`, options);
+  };
+
+  return {mediaArray, postMedia, putMedia, deleteMedia, loading};
 };
 
 const useLogin = () => {
